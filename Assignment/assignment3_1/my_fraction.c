@@ -61,7 +61,16 @@ static Fraction decimalToFraction(const char *str) {
     if (p) {
         memmove(p, p + 1, strlen(p + 1) + 1);
     }
-    
+
+    // 문자 포함 여부
+    int start = (buf[0] == '-') ? 1 : 0;
+    for (int i = start; buf[i] != '\0'; i++) {
+        if (!isdigit((unsigned char)buf[i])) {
+            fprintf(stderr, "입력된 문자열이 유효하지 않습니다.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+
     long long numer = atoll(buf);
     Fraction f = { numer, denom };
     return reduce(f);
@@ -137,7 +146,7 @@ void toString(Fraction f, char *buf, int buf_size) {
 Fraction reduce(Fraction f) {
     // 추가 점수 - 분모가 0일경우 예외처리
     if(f.denominator == 0) {
-        fprintf(stderr, "분모가 0이 될 수 없습니다.");
+        fprintf(stderr, "분모가 0이 될 수 없습니다\n.");
         exit(EXIT_FAILURE);
     }
 
