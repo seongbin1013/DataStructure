@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "my_math.h"
-#include "my_math.c"
 
 int main(void) {
     int a, b;
