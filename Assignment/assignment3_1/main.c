@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "my_fraction.h"
 #include "my_fraction.c"
 
 #define BUF_SIZE 100 // buf_size는 충분히 큰 값으로 설정하여 결과 문자열이 버퍼를 초과하지 않도록 함
