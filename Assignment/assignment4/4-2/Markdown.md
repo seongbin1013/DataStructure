@@ -140,7 +140,7 @@ n      F(n)                 F(n-1)               GCD    FibTime(us)         GCDT
 
 ---
 
-## 5. 결과 분석 및 O(log N) 검증
+## 5. 실행 결과 분석 및 시간복잡도 검증
 
 ### GCD 결과
 
