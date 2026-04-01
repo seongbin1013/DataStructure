@@ -1,10 +1,17 @@
 # 과제 4-1: GCD(최대공약수) 시간복잡도와 Big-O
 
+## 설명
+
+제출 코드 파일: 새로 만들어 main.c로 파일 제출
+
 ## 1. 제출한 GCD 알고리즘
 
 - **알고리즘 방식**: 유클리드 호제법 (반복문)
 
 ```c
+#include <stdio.h>
+#include <stdlib.h>
+
 int gcd(int a,int b) {
     if(a < 0) a = -a;
     if(b < 0) b = -b;
@@ -17,6 +24,19 @@ int gcd(int a,int b) {
         a = temp;
     }
     return a;
+}
+
+int main(void) {
+    int a, b;
+    printf("두 정수 입력: ");
+
+    if(scanf("%d %d", &a, &b) != 2) {
+        fprintf(stderr, "잘못된 입력입니다.\n");
+        return EXIT_FAILURE;
+    }
+    printf("GCD(%d, %d) = %d\n", a, b, gcd(a,b));
+
+    return 0;
 }
 ```
 
@@ -68,17 +88,6 @@ GCD(a,0) = a
 특히 최악의 경우에도 반복 횟수는 입력값의 크기에 대해 로그(log) 수준으로 증가한다.
 
 따라서 while 루프의 반복 횟수는 O(log N)이라고 할 수 있다.
-
-### 실제로 확인해보면
-
-|  입력 N   | 반복 횟수 (최대) |
-| :-------: | :--------------: |
-|    10     |      약 4번      |
-|    100    |      약 7번      |
-|   1,000   |     약 10번      |
-| 1,000,000 |     약 20번      |
-
-N이 커지더라도 반복 횟수는 많이 늘어나지 않고, 조금씩만 증가하는 것을 확인할 수 있다.
 
 ---
 
