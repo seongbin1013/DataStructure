@@ -2,12 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-// 1) 배열 알아보기
-// - 배열 전체를 0~N의 임의의 수로 채운 뒤, 배열을 포인터를 사용하며 순회하며 다음을 수행한다.
-//   - 처음부터 끝까지 출력해본다.
-//   - 뒤에서부터 처음까지 출력해본다.
-//   - 배열 전체의 총합, 최대값, 최소값을 출력해본다.
-
 int main() {
     int n;
     printf("배열 크기 N을 입력하세요: ");
@@ -30,16 +24,9 @@ int main() {
     // 0~N 사이의 난수로 배열 채우기
     int *ptr = arr;
     for (int i = 0; i < n; i++) {
-        *(ptr + i) = i; // 0, 1, 2, ..., N-1
+        *(ptr + i) = rand() % (n + 1); // 0~N 범위의 난수
     }
-    for (int i = n - 1; i > 0; i--) {
-        int j = rand() % (i + 1);
-        // ptr[i] 와 ptr[j] 를 교환
-        int tmp = *(ptr + i);
-        *(ptr + i) = *(ptr + j);
-        *(ptr + j) = tmp;
-    }
-    
+
     // 순방향 출력
     printf("--- 순방향 출력 ---\n");
     for (int i = 0; i < n; i++) {
