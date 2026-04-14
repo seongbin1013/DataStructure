@@ -2,7 +2,7 @@
 
 ## 구현
 
-### 순환적 방밥
+### 순환적 방법
 
 ```c
 long long fib_iterative(int n) {
