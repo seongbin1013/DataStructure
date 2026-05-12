@@ -81,8 +81,6 @@ LinkedList* deleteAtLinkedList(LinkedList* li, int at) {
 			free(fPtr);
 		}
 		else {
-
-
             for (int i = 0; i < at - 1; i++) {
                 nPtr = nPtr->next;
             }
