@@ -47,7 +47,7 @@ int printLinkedList(LinkedList* li) {
 	printf("LinkedList size: %d\n", li->size);
 
 	for (int i = 0; i < li->size; i++) {
-		printf("[%d] x:%d, y:%d, next:%x\n", 
+		printf("[%d] x:%d, y:%d, next:%p\n", 
 			i, current->x, current->y, current->next);
 
 		current = current->next;
