@@ -1,24 +1,25 @@
 #include "LinkedList.h"
 
 LinkedList* createLinkedList() {
-	struct linkedList* r;
-	r = (struct linkedList*)malloc(sizeof(struct linkedList));
+	LinkedList* li;
+	li = (LinkedList*)malloc(sizeof(LinkedList));
+	li->head = NULL;
+	li->size = 0;
 
-	r->head = (struct pointType*)NULL;
-	r->size = 0;
-
-	return r;
+	return li;
 }
 
 int destroyLinkedList(LinkedList* li) {
-	struct pointType* nptr, * mptr;
-	for (nptr = li->head; nptr != NULL; nptr = mptr) {
-		mptr = nptr->next;
-		free(nptr);
+	if (li == NULL) {
+		return 0;
+	}
+
+	while (li->size > 0) {
+		int temp;
+		deleteAtLinkedList(li, 0, &temp);
 	}
 
 	free(li);
-
 	return 1;
 }
 
@@ -30,167 +31,146 @@ int sizeLinkedList(LinkedList* li) {
 	return li->size;
 }
 
-LinkedList* insertFirstLinkedList(LinkedList* li, PointType item) {
-	PointType* ptr = (PointType*)malloc(sizeof(PointType));
-	*ptr = item;
+LinkedList* insertFirstLinkedList(LinkedList* li, int value) {
+	NodeType* nPtr;
+	nPtr = (NodeType*)malloc(sizeof(NodeType));
+	nPtr->data = value;
 
-	ptr->next = li->head;
-	li->head = ptr;
+	if (li->head == NULL) {
+		nPtr->next = nPtr;
+		nPtr->prev = nPtr;
+		li->head = nPtr;
+	}
+	else {
+		NodeType* tail;
+		tail = li->head->prev;
+		nPtr->next = li->head;
+		nPtr->prev = tail;
+		tail->next = nPtr;
+		li->head->prev = nPtr;
+		li->head = nPtr;
+	}
+
+	li->size++;
+	return li;
+}
+
+LinkedList* insertLastLinkedList(LinkedList* li, int value) {
+	NodeType* nPtr;
+	nPtr = (NodeType*)malloc(sizeof(NodeType));
+	nPtr->data = value;
+
+	if (li->head == NULL) {
+		nPtr->next = nPtr;
+		nPtr->prev = nPtr;
+		li->head = nPtr;
+	}
+	else {
+		NodeType* tail;
+		tail = li->head->prev;
+		nPtr->next = li->head;
+		nPtr->prev = tail;
+		tail->next = nPtr;
+		li->head->prev = nPtr;
+	}
+
+	li->size++;
+	return li;
+}
+
+LinkedList* insertAtLinkedList(LinkedList* li, int at, int value) {
+	if (at < 0 || at > li->size) {
+		printf("잘못된 위치입니다.\n");
+		return li;
+	}
+
+	if (at == 0) {
+		return insertFirstLinkedList(li, value);
+	}
+
+	if (at == li->size) {
+		return insertLastLinkedList(li, value);
+	}
+
+	NodeType* current;
+	current = li->head;
+
+	for (int i = 0; i < at; i++) {
+		current = current->next;
+	}
+
+	NodeType* nPtr;
+	nPtr = (NodeType*)malloc(sizeof(NodeType));
+	nPtr->data = value;
+	nPtr->prev = current->prev;
+	nPtr->next = current;
+	current->prev->next = nPtr;
+	current->prev = nPtr;
+
 	li->size++;
 
 	return li;
 }
 
-int printLinkedList(LinkedList* li) {
-	PointType* current = li->head;
-	printf("LinkedList:\n");
-	printf("LinkedList size: %d\n", li->size);
-
-	for (int i = 0; i < li->size; i++) {
-		printf("[%d] x:%d, y:%d, next:%p\n", 
-			i, current->x, current->y, current->next);
-
-		current = current->next;
+int deleteAtLinkedList(LinkedList* li, int at, int* deletedValue) {
+	if (li->head == NULL) {
+		printf("리스트가 비어 있습니다.\n");
+		return 0;
 	}
+
+	if (at < 0 || at >= li->size) {
+		printf("잘못된 위치입니다.\n");
+		return 0;
+	}
+
+	NodeType* dPtr;
+	dPtr = li->head;
+
+	for (int i = 0; i < at; i++) {
+		dPtr = dPtr->next;
+	}
+
+	*deletedValue = dPtr->data;
+
+	if (li->size == 1) {
+		li->head = NULL;
+	}
+	else {
+		dPtr->prev->next = dPtr->next;
+		dPtr->next->prev = dPtr->prev;
+
+		if (at == 0) {
+			li->head = dPtr->next;
+		}
+	}
+
+	free(dPtr);
+	li->size--;
+
 	return 1;
 }
 
-LinkedList* insertLastLinkedList(LinkedList* li, PointType item) {
-	PointType* ptr = li->head;
+int printLinkedList(LinkedList* li) {
+	if (li->head == NULL) {
+		printf("리스트가 비어 있습니다.\n");
+		return 0;
+	}
 
-	PointType* nPtr = (PointType*)malloc(sizeof(PointType));
-	*nPtr = item;
-	nPtr->next = NULL;
+	NodeType* current;
+	current = li->head;
 
-	if (ptr == NULL) {
-		li->head = nPtr;
-	} else {
-		while (ptr->next != NULL) {
-			ptr = ptr->next;
+	printf("리스트 크기: %d\n", li->size);
+	printf("전체 목록: ");
+
+	for (int i = 0; i < li->size; i++) {
+		printf("%d", current->data);
+
+		if (i != li->size - 1) {
+			printf(" -> ");
 		}
-		ptr->next = nPtr;
+		current = current->next;
 	}
 
-	li->size++;
-
-	return li;
-}
-
-PointType deleteAtLinkedList(LinkedList* li, int at) {
-	PointType temp = { 0, 0, NULL };
-
-	if (at >= 0 && at < li->size) {
-		PointType* nPtr = li->head;
-		PointType* fPtr;
-
-		if (at == 0) {
-			fPtr = li->head;
-			li->head = fPtr->next;
-		}
-		else {
-			for (int i = 0; i < at - 1; i++) {
-				nPtr = nPtr->next;
-			}
-
-			fPtr = nPtr->next;
-			nPtr->next = fPtr->next;
-		}
-		temp = *fPtr;
-		free(fPtr);
-		li->size--;
-	}
-
-	return temp;
-}
-
-LinkedList* insertItemLinkedList(LinkedList* li, PointType* pre, 
-	PointType item) {
-
-	PointType* nPtr = (PointType*)malloc(sizeof(PointType));
-	*nPtr = item;
-
-	if (pre != NULL) {
-		nPtr->next = pre->next;
-		pre->next = nPtr;
-	}
-	else {
-		nPtr->next = li->head;
-		li->head = nPtr;
-	}
-
-	li->size++;
-
-	return li;
-}
-
-LinkedList* insertAtLinkedList(LinkedList* li, int at, PointType item) {
-	PointType* pre = NULL;
-	PointType* nPtr = li->head;
-
-	if (at < 0 || at > li->size) {
-		return NULL;
-	}
-
-	for (int i = 0; i < at; i++) {
-		pre = nPtr;
-		nPtr = nPtr->next;
-	}
-
-	return insertItemLinkedList(li, pre, item);
-}
-
-PointType deleteFirstLinkedList(LinkedList* li) {
-	if (li->size != 0) {
-		PointType* tPtr = li->head;
-		li->head = tPtr->next;
-
-		PointType temp = *tPtr;
-		free(tPtr);
-
-		li->size--;
-		return temp;
-	}
-	else {
-		return (PointType) { 0, 0, 0 };
-	}
-}
-
-PointType deleteLastLinkedList(LinkedList* li) {
-	PointType* pre;
-	PointType* iPtr;
-
-	pre = li->head;
-
-	if (pre == NULL) {
-		return (PointType) { 0, 0, 0 };
-	}
-
-	iPtr = pre->next;
-
-	if (iPtr == NULL) {
-		li->head = NULL;
-
-		PointType temp;
-		temp = *pre;
-
-		free(pre);
-		li->size--;
-
-		return temp;
-	}
-	else {
-		while (iPtr->next != NULL) {
-			pre = iPtr;
-			iPtr = iPtr->next;
-		}
-
-		PointType temp;
-		temp = *iPtr;
-
-		pre->next = NULL;
-		free(iPtr);
-		li->size--;
-
-		return temp;
-	}
+	printf("\n");
+	return 1;
 }

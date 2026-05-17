@@ -1,14 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct pointType {
-	int x;
-	int y;
-	struct pointType* next;
-} PointType;
+typedef struct nodeType {
+	int data;
+	struct nodeType* next;
+	struct nodeType* prev;
+} NodeType;
 
 typedef struct linkedList {
-	struct pointType* head;
+	NodeType* head;
 	int size;
 } LinkedList;
 
@@ -17,13 +17,9 @@ extern int destroyLinkedList(LinkedList* li);
 extern int isEmptyLinkedList(LinkedList* li);
 extern int sizeLinkedList(LinkedList* li);
 
-extern LinkedList* insertFirstLinkedList(LinkedList* li, PointType item);
-extern LinkedList* insertLastLinkedList(LinkedList* li, PointType item);
-extern LinkedList* insertItemLinkedList(LinkedList* li, PointType* pre, PointType item);
-extern LinkedList* insertAtLinkedList(LinkedList* li, int at, PointType item);
+extern LinkedList* insertFirstLinkedList(LinkedList* li, int value);
+extern LinkedList* insertLastLinkedList(LinkedList* li, int value);
+extern LinkedList* insertAtLinkedList(LinkedList* li, int at, int value);
 
-extern PointType deleteAtLinkedList(LinkedList* li, int at);
-extern PointType deleteFirstLinkedList(LinkedList* li);
-extern PointType deleteLastLinkedList(LinkedList* li);
-
+extern int deleteAtLinkedList(LinkedList* li, int at, int* deleted);
 extern int printLinkedList(LinkedList* li);
