@@ -8,7 +8,8 @@ int main() {
 	int value;
 	int index;
 	int result;
-	int deleted;
+	PointType item;
+	PointType deleted;
 
 	while(1) {
 		printf("1. 맨 앞에 추가\n");
@@ -26,7 +27,8 @@ int main() {
 			printf("추가할 정수 입력: ");
 			scanf("%d", &value);
 
-			insertFirstLinkedList(myList1, value);
+			item = (PointType) { value, 0, NULL}; 
+			insertFirstLinkedList(myList1, item);
 
 			printf("맨 앞에 %d 추가\n", value);
 			break;
@@ -35,7 +37,8 @@ int main() {
 			printf("추가할 정수 입력: ");
 			scanf("%d", &value);
 
-			insertLastLinkedList(myList1, value);
+			item = (PointType) { value, 0, NULL};
+			insertLastLinkedList(myList1, item);
 
 			printf("맨 뒤에 %d 추가\n", value);
 			break;
@@ -47,7 +50,8 @@ int main() {
 			printf("추가할 정수 입력: ");
 			scanf("%d", &value);
 
-			insertAtLinkedList(myList1, index, value);
+			item = (PointType) { value, 0, NULL};
+			insertAtLinkedList(myList1, index, item);
 
 			printf("%d 위치에 %d 추가\n", index, value);
 			break;
@@ -56,9 +60,8 @@ int main() {
 			printf("삭제할 위치 입력: ");
 			scanf("%d", &index);
 
-			if (deleteAtLinkedList(myList1, index, &deleted)) {
-				printf("위치 %d의 요소 %d 삭제\n", index, deleted);
-			}
+			deleted = deleteAtLinkedList(myList1, index);
+			printf("위치 %d의 요소 %d 삭제\n", index, deleted.x);
 			break;
 
 			case 5:
